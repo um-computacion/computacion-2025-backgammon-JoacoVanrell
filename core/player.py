@@ -1,5 +1,5 @@
 from typing import List
-from .checker import Checker
+from .checker import Ficha
 
 class Jugador:
 
@@ -11,7 +11,7 @@ class Jugador:
 
         self.__id_jugador__ = id_jugador
         self.__nombre__ = nombre.strip()
-        self.__fichas__: List[Checker] = []
+        self.__fichas__: List[Ficha] = []
 
 
     def obtener_id(self) -> int:
@@ -20,12 +20,12 @@ class Jugador:
     def obtener_nombre(self) -> str:
         return self.__nombre__
 
-    def agregar_ficha(self, ficha: Checker) -> None:
+    def agregar_ficha(self, ficha: Ficha) -> None:
         if ficha.obtener_jugador() != self.__id_jugador__:
             raise ValueError("La ficha no pertenece a este jugador")
         self.__fichas__.append(ficha)
 
-    def remover_ficha(self) -> Checker:
+    def remover_ficha(self) -> Ficha:
         if not self.__fichas__:
             raise IndexError("El jugador no tiene fichas para remover")
         return self.__fichas__.pop()
@@ -54,19 +54,19 @@ class TestJugador(unittest.TestCase):
 
     def test_agregar_ficha_valida(self):
         jugador = Jugador(1, "Antonio")
-        ficha = Checker(1)
+        ficha = Ficha(1)
         jugador.agregar_ficha(ficha)
         self.assertEqual(jugador.contar_fichas(), 1)
 
     def test_agregar_ficha_invalida(self):
         jugador = Jugador(1, "Antonio")
-        ficha = Checker(2)
+        ficha = Ficha(2)
         with self.assertRaises(ValueError):
             jugador.agregar_ficha(ficha)
 
     def test_remover_ficha(self):
         jugador = Jugador(1, "Evangelina")
-        ficha = Checker(1)
+        ficha = Ficha(1)
         jugador.agregar_ficha(ficha)
         removed_ficha = jugador.remover_ficha()
         self.assertEqual(removed_ficha.obtener_jugador(), 1)
@@ -80,8 +80,8 @@ class TestJugador(unittest.TestCase):
     def test_contar_fichas(self):
         jugador = Jugador(1, "Evangelina")
         self.assertEqual(jugador.contar_fichas(), 0)
-        ficha1 = Checker(1)
-        ficha2 = Checker(1)
+        ficha1 = Ficha(1)
+        ficha2 = Ficha(1)
         jugador.agregar_ficha(ficha1)
         jugador.agregar_ficha(ficha2)
         self.assertEqual(jugador.contar_fichas(), 2)
