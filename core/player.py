@@ -1,52 +1,39 @@
 class Jugador:
     """
-    Cada jugador tiene nombre, color de fichas y maneja sus fichas básicas.
+    Representa a un jugador de Backgammon.
     """
     
     def __init__(self, nombre, color):
-        """
-        Constructor del jugador.
-        
-        Args:
-            nombre (str): Nombre del jugador
-            color (str): Color de las fichas ('blanco' o 'negro')
-        """
         self.__nombre__ = nombre
         self.__color__ = color
-        self.__fichas_totales__ = 15  # Cada jugador tiene 15 fichas
+        self.__fichas_totales__ = 15
+        self.__fichas_en_barra__ = 0
+        self.__fichas_fuera__ = 0  # fichas ya retiradas del tablero
     
     def get_nombre(self):
-        """
-        Obtiene el nombre del jugador.
-        
-        Returns:
-            str: Nombre del jugador
-        """
         return self.__nombre__
     
     def get_color(self):
-        """
-        Obtiene el color de las fichas del jugador.
-        
-        Returns:
-            str: Color de las fichas
-        """
         return self.__color__
     
     def get_fichas_totales(self):
-        """
-        Obtiene la cantidad total de fichas del jugador.
-        
-        Returns:
-            int: Número total de fichas (siempre 15)
-        """
         return self.__fichas_totales__
     
+    def get_fichas_en_barra(self):
+        return self.__fichas_en_barra__
+    
+    def get_fichas_fuera(self):
+        return self.__fichas_fuera__
+    
+    def agregar_a_barra(self):
+        self.__fichas_en_barra__ += 1
+    
+    def sacar_de_barra(self):
+        if self.__fichas_en_barra__ > 0:
+            self.__fichas_en_barra__ -= 1
+    
+    def agregar_fuera(self):
+        self.__fichas_fuera__ += 1
+    
     def __str__(self):
-        """
-        Representación del jugador como texto.
-        
-        Returns:
-            str: Descripción del jugador
-        """
-        return f"Jugador: {self.__nombre__} (Fichas {self.__color__})"
+        return f"Jugador: {self.__nombre__} ({self.__color__})"
