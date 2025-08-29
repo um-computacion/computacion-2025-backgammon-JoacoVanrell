@@ -76,4 +76,4 @@ class Dado:
         Returns:
             bool: True si ambos dados tienen el mismo valor
         """
-        return self.__dado1__ == self.__dado2__
+        return self.__dado1__ != 0 and self.__dado1__ == self.__dado2__
