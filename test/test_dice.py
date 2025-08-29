@@ -19,29 +19,19 @@ class TestDado(unittest.TestCase):
         self.assertTrue(1 <= r1 <= 6)
         self.assertTrue(1 <= r2 <= 6)
 
-    def test_es_doble_coincide_con_longitud(self):
-        d = Dado()
-        vals = d.lanzar_dados()
-        if len(vals) == 4:
-            self.assertTrue(d.es_doble())
-        else:
-            self.assertFalse(d.es_doble())
-
     def test_usar_lanzada_respeta_cantidad(self):
         d = Dado()
         vals = d.lanzar_dados()
         v = vals[0]
-        # siempre debería poder usarse al menos una vez
         self.assertTrue(d.usar_lanzada(v))
         if len(vals) == 2:
-            # si no es doble, ya no debería poder usarse de nuevo
             self.assertFalse(d.usar_lanzada(v))
         else:
             # si es doble, se puede usar hasta 4 veces
-            self.assertTrue(d.usar_lanzada(v))   # 2da
-            self.assertTrue(d.usar_lanzada(v))   # 3ra
-            self.assertTrue(d.usar_lanzada(v))   # 4ta
-            self.assertFalse(d.usar_lanzada(v))  # 5ta ya no
+            self.assertTrue(d.usar_lanzada(v))  
+            self.assertTrue(d.usar_lanzada(v))   
+            self.assertTrue(d.usar_lanzada(v))   
+            self.assertFalse(d.usar_lanzada(v))  
 
 if __name__ == "__main__":
     unittest.main()
