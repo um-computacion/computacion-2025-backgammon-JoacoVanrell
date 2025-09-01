@@ -27,5 +27,13 @@ class TestJugador(unittest.TestCase):
         j.agregar_fuera()
         self.assertEqual(j.get_fichas_fuera(), 1)
 
+    def test_ha_ganado(self):
+        j = Jugador("Test", "blanco")
+        self.assertFalse(j.ha_ganado())
+    
+        # Simular que todas las fichas están fuera
+        j._Jugador__fichas_fuera__ = 15
+        self.assertTrue(j.ha_ganado())
+
 if __name__ == "__main__":
     unittest.main()
