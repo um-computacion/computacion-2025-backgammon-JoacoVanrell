@@ -1,5 +1,5 @@
 class Jugador:
-    """
+    """gi
     Representa a un jugador de Backgammon.
     """
     
