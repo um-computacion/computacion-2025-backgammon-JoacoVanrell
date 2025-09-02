@@ -29,13 +29,21 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## Plantilla para futuras entradas
 
-### [Versión] - Fecha
+### [Liberado] - 2025-09-01
 
 #### Agregado
-- Nuevas características
+- Clase Ficha para representar fichas individuales
+  - Manejo de posición en tablero (puntos 1-24)
+  - Estados: en tablero, en barra, fuera del tablero
+  - Métodos para mover entre estados
+  - Comparación entre fichas y representación string
 
 #### Cambiado  
-- Cambios en funcionalidad existente
+- Completada clase Jugador con funcionalidad completa
+  - Agregados métodos para manejo de fichas en barra
+  - Agregados métodos para bear-off (fichas fuera del tablero)
+  - Implementado método ha_ganado() para verificar victoria
+  - Documentación completa con docstrings en todos los métodos
 
 #### Deprecated
 - Características que serán removidas
