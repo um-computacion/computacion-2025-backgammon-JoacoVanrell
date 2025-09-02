@@ -27,7 +27,6 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Desarrollar interfaz CLI
 - Implementar tests unitarios
 
-## Plantilla para futuras entradas
 
 ### [Liberado] - 2025-09-01
 
@@ -45,14 +44,3 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.
   - Implementado método ha_ganado() para verificar victoria
   - Documentación completa con docstrings en todos los métodos
 
-#### Deprecated
-- Características que serán removidas
-
-#### Removido
-- Características removidas
-
-#### Arreglado
-- Bugs corregidos
-
-#### Seguridad
-- Vulnerabilidades corregidas
