@@ -32,7 +32,7 @@ class TestJugador(unittest.TestCase):
         self.assertFalse(j.ha_ganado())
     
         # Simular que todas las fichas están fuera
-        j._Jugador__fichas_fuera__ = 15
+        j.__fichas_fuera__ = 15
         self.assertTrue(j.ha_ganado())
 
 if __name__ == "__main__":
