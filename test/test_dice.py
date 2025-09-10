@@ -1,37 +1,55 @@
 import unittest
+from unittest.mock import patch
 from core.dice import Dado
+
 
 class TestDado(unittest.TestCase):
     def test_estado_inicial(self):
         d = Dado()
-        self.assertEqual(d.get_proximas_tiradas(), [])
-        self.assertEqual(d.get_resultado_dados(), (0, 0))
+        self.assertEqual(d.get_valores(), (0, 0))
         self.assertFalse(d.es_doble())
 
-    def test_lanzar_dados_devuelve_valores_validos(self):
+    def test_lanzar_con_inyectadas(self):
         d = Dado()
-        vals = d.lanzar_dados()
-        self.assertIn(len(vals), (2, 4))
-        for v in vals:
-            self.assertGreaterEqual(v, 1)
-            self.assertLessEqual(v, 6)
-        r1, r2 = d.get_resultado_dados()
-        self.assertTrue(1 <= r1 <= 6)
-        self.assertTrue(1 <= r2 <= 6)
+        d.set_proximas_tiradas([(1, 2), (3, 3)])
+        v1 = d.lanzar()
+        v2 = d.lanzar()
+        self.assertEqual(v1, (1, 2))
+        self.assertEqual(v2, (3, 3))
+        self.assertTrue(d.es_doble())
 
-    def test_usar_lanzada_respeta_cantidad(self):
+    def test_usar_lanzadas_respetando_fifo(self):
         d = Dado()
-        vals = d.lanzar_dados()
-        v = vals[0]
-        self.assertTrue(d.usar_lanzada(v))
-        if len(vals) == 2:
-            self.assertFalse(d.usar_lanzada(v))
-        else:
-            # si es doble, se puede usar hasta 4 veces
-            self.assertTrue(d.usar_lanzada(v))  
-            self.assertTrue(d.usar_lanzada(v))   
-            self.assertTrue(d.usar_lanzada(v))   
-            self.assertFalse(d.usar_lanzada(v))  
+        d.set_proximas_tiradas([(2, 5), (6, 1), (4, 4)])
+        self.assertEqual(d.lanzar(), (2, 5))
+        self.assertEqual(d.lanzar(), (6, 1))
+        self.assertEqual(d.lanzar(), (4, 4))
+        self.assertTrue(d.es_doble())
+
+    @patch("core.dice.random.randint", side_effect=[6, 2])
+    def test_lanzar_random_rango(self, _mock_randint):
+        d = Dado()
+        v = d.lanzar()
+        self.assertEqual(v, (6, 2))
+        self.assertFalse(d.es_doble())
+
+import unittest
+from core.dice import Dado
+
+
+class TestDiceExtra(unittest.TestCase):
+    # Cobertura: alias lanzar_dados y get_proximas_tiradas
+    def test_aliases_y_copia_de_lista(self):
+        d = Dado()
+        d.set_proximas_tiradas([(1, 1)])
+        self.assertEqual(d.get_proximas_tiradas(), [(1, 1)])  # alias getter
+        # lanzar_dados debe usar el mismo flujo que lanzar
+        self.assertEqual(d.lanzar_dados(), (1, 1))
+        # la lista devuelta por el getter es copia (no afecta interno)
+        lista = d.get_proximas_tiradas()
+        lista.append((6, 6))
+        self.assertEqual(d.get_proximas_tiradas(), [])
+
 
 if __name__ == "__main__":
     unittest.main()
