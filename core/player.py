@@ -1,33 +1,49 @@
 class Jugador:
+    TOTAL_FICHAS = 15
 
-    TOTAL_FICHAS: int = 15
-
-    def __init__(self, color: str) -> None:
-        self._color: str = color
-        self._en_barra: int = 0
-        self._fuera: int = 0
+    def __init__(self, color: str, nombre: str | None = None) -> None:
+        """
+        Inicializa un jugador con un color y un nombre opcional.
+        Si no se provee nombre, se usa el color capitalizado.
+        """
+        self._color = color
+        self._nombre = nombre or color.title()
+        self._en_barra = 0
+        self._fuera = 0
 
     def get_color(self) -> str:
+        """Devuelve el color del jugador."""
         return self._color
-    
-    def agregar_a_barra(self) -> None:
-        self._en_barra += 1
 
-    def quitar_de_barra(self) -> None:
+    def get_nombre(self) -> str:
+        """Devuelve el nombre del jugador."""
+        return self._nombre
+
+    def get_fichas_en_barra(self) -> int:
+        """Devuelve cuántas fichas tiene en la barra."""
+        return self._en_barra
+
+    def sacar_de_barra(self) -> None:
+        """Quita una ficha de la barra, si hay alguna."""
         if self._en_barra > 0:
             self._en_barra -= 1
-    
+
+    def agregar_a_barra(self) -> None:
+        """Agrega una ficha a la barra."""
+        self._en_barra += 1
+
+    def get_fichas_fuera(self) -> int:
+        """Devuelve cuántas fichas ha sacado del tablero."""
+        return self._fuera
+
     def agregar_fuera(self) -> None:
-        #cuando ficha sale del tablero
+        """
+        Agrega una ficha fuera del tablero.
+        No excede TOTAL_FICHAS para no sobrecontar.
+        """
         if self._fuera < self.TOTAL_FICHAS:
             self._fuera += 1
-        
-    def en_barra(self) -> int:
-        return self._en_barra
-    
-    def fuera(self) -> int:
-        return self._fuera
-    
+
     def ha_ganado(self) -> bool:
+        """Indica si el jugador ha ganado (todas sus fichas fuera)."""
         return self._fuera == self.TOTAL_FICHAS
-    
