@@ -1,105 +1,49 @@
 class Jugador:
-    """
-    Cada jugador tiene un nombre, color de fichas y maneja el estado
-    de sus fichas durante el juego (en tablero, en barra, fuera del tablero).
-    """
-    
-    def __init__(self, nombre, color):
+    TOTAL_FICHAS = 15
+
+    def __init__(self, color: str, nombre: str | None = None) -> None:
         """
-        Constructor del jugador.
-        
-        Args:
-            nombre (str): Nombre del jugador
-            color (str): Color de las fichas ('blanco' o 'negro')
+        Inicializa un jugador con un color y un nombre opcional.
+        Si no se provee nombre, se usa el color capitalizado.
         """
-        self.__nombre__ = nombre
-        self.__color__ = color
-        self.__fichas_totales__ = 15
-        self.__fichas_en_barra__ = 0
-        self.__fichas_fuera__ = 0  # fichas ya retiradas del tablero
-    
-    def get_nombre(self):
+        self._color = color
+        self._nombre = nombre or color.title()
+        self._en_barra = 0
+        self._fuera = 0
+
+    def get_color(self) -> str:
+        """Devuelve el color del jugador."""
+        return self._color
+
+    def get_nombre(self) -> str:
+        """Devuelve el nombre del jugador."""
+        return self._nombre
+
+    def get_fichas_en_barra(self) -> int:
+        """Devuelve cuántas fichas tiene en la barra."""
+        return self._en_barra
+
+    def sacar_de_barra(self) -> None:
+        """Quita una ficha de la barra, si hay alguna."""
+        if self._en_barra > 0:
+            self._en_barra -= 1
+
+    def agregar_a_barra(self) -> None:
+        """Agrega una ficha a la barra."""
+        self._en_barra += 1
+
+    def get_fichas_fuera(self) -> int:
+        """Devuelve cuántas fichas ha sacado del tablero."""
+        return self._fuera
+
+    def agregar_fuera(self) -> None:
         """
-        Obtiene el nombre del jugador.
-        
-        Returns:
-            str: Nombre del jugador
+        Agrega una ficha fuera del tablero.
+        No excede TOTAL_FICHAS para no sobrecontar.
         """
-        return self.__nombre__
-    
-    def get_color(self):
-        """
-        Obtiene el color de las fichas del jugador.
-        
-        Returns:
-            str: Color de las fichas ('blanco' o 'negro')
-        """
-        return self.__color__
-    
-    def get_fichas_totales(self):
-        """
-        Obtiene el número total de fichas del jugador.
-        
-        Returns:
-            int: Cantidad total de fichas (siempre 15)
-        """
-        return self.__fichas_totales__
-    
-    def get_fichas_en_barra(self):
-        """
-        Obtiene el número de fichas capturadas en la barra.
-        
-        Returns:
-            int: Cantidad de fichas en la barra
-        """
-        return self.__fichas_en_barra__
-    
-    def get_fichas_fuera(self):
-        """
-        Obtiene el número de fichas que salieron del tablero (bear-off).
-        
-        Returns:
-            int: Cantidad de fichas fuera del tablero
-        """
-        return self.__fichas_fuera__
-    
-    def agregar_a_barra(self):
-        """
-        Agrega una ficha a la barra cuando es capturada por el oponente.
-        """
-        self.__fichas_en_barra__ += 1
-    
-    def sacar_de_barra(self):
-        """
-        Saca una ficha de la barra para reingresarla al juego.
-        
-        Solo reduce el contador si hay fichas en la barra.
-        """
-        if self.__fichas_en_barra__ > 0:
-            self.__fichas_en_barra__ -= 1
-    
-    def agregar_fuera(self):
-        """
-        Saca una ficha del tablero (bear-off) cuando llega al final.
-        """
-        self.__fichas_fuera__ += 1
-    
-    def ha_ganado(self):
-        """
-        Verifica si el jugador ha ganado la partida.
-        
-        Un jugador gana cuando todas sus 15 fichas están fuera del tablero.
-        
-        Returns:
-            bool: True si el jugador ganó, False en caso contrario
-        """
-        return self.__fichas_fuera__ == 15
-    
-    def __str__(self):
-        """
-        Representación del jugador como cadena de texto.
-        
-        Returns:
-            str: Descripción del jugador con nombre y color
-        """
-        return f"Jugador: {self.__nombre__} ({self.__color__})"
+        if self._fuera < self.TOTAL_FICHAS:
+            self._fuera += 1
+
+    def ha_ganado(self) -> bool:
+        """Indica si el jugador ha ganado (todas sus fichas fuera)."""
+        return self._fuera == self.TOTAL_FICHAS

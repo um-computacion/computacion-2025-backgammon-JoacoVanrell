@@ -2,36 +2,24 @@ import unittest
 from core.dice import Dado
 
 class TestDado(unittest.TestCase):
-    def test_estado_inicial(self):
+
+    def test_setear_y_lanzar_predefinido(self):
         d = Dado()
-        self.assertEqual(d.get_proximas_tiradas(), [])
-        self.assertEqual(d.get_resultado_dados(), (0, 0))
+        d.set_proximas_tiradas([(3,3), (1,4)])
+        # primer lanzamiento
+        self.assertEqual(d.lanzar(), (3,3))
+        self.assertTrue(d.es_doble())
+        self.assertEqual(d.get_valores(), (3,3))
+        # segundo lanzamiento
+        self.assertEqual(d.lanzar(), (1,4))
         self.assertFalse(d.es_doble())
+        self.assertEqual(d.get_valores(), (1,4))
 
-    def test_lanzar_dados_devuelve_valores_validos(self):
+    def test_lanzar_valores_random(self):
         d = Dado()
-        vals = d.lanzar_dados()
-        self.assertIn(len(vals), (2, 4))
-        for v in vals:
-            self.assertGreaterEqual(v, 1)
-            self.assertLessEqual(v, 6)
-        r1, r2 = d.get_resultado_dados()
-        self.assertTrue(1 <= r1 <= 6)
-        self.assertTrue(1 <= r2 <= 6)
-
-    def test_usar_lanzada_respeta_cantidad(self):
-        d = Dado()
-        vals = d.lanzar_dados()
-        v = vals[0]
-        self.assertTrue(d.usar_lanzada(v))
-        if len(vals) == 2:
-            self.assertFalse(d.usar_lanzada(v))
-        else:
-            # si es doble, se puede usar hasta 4 veces
-            self.assertTrue(d.usar_lanzada(v))  
-            self.assertTrue(d.usar_lanzada(v))   
-            self.assertTrue(d.usar_lanzada(v))   
-            self.assertFalse(d.usar_lanzada(v))  
+        valores = d.lanzar()
+        self.assertIn(valores[0], range(1,7))
+        self.assertIn(valores[1], range(1,7))
 
 if __name__ == "__main__":
     unittest.main()
