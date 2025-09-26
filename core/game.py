@@ -159,4 +159,7 @@ class Game:
 
     def mostrar_tablero(self) -> str:
         """Alias CLI: devuelve la cadena de tablero actual."""
+
         return self.tablero.mostrar_tablero()
+
+
