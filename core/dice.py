@@ -35,4 +35,6 @@ class Dado:
         """Indica si la última tirada fue un doble."""
         return self._dado1 != 0 and self._dado1 == self._dado2
 
+
     lanzar_dados = lanzar
+

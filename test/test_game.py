@@ -72,4 +72,4 @@ class TestGame(unittest.TestCase):
         self.assertEqual(str(cm.exception), "Ese valor de dado no está disponible")
 
 if __name__ == "__main__":
-    unittest.main()
+

@@ -72,4 +72,6 @@ class Ficha:
         return (self._color == otra._color
                 and self._posicion == otra._posicion
                 and self._en_barra == otra._en_barra
+
                 and self._fuera_tablero == otra._fuera_tablero)
+
