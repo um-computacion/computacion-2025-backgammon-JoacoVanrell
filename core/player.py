@@ -46,4 +46,13 @@ class Jugador:
 
     def ha_ganado(self) -> bool:
         """Indica si el jugador ha ganado (todas sus fichas fuera)."""
+        return self._fuera == self.TOTAL_FICHAS
+
+    def en_barra(self) -> int:
+        """Alias para get_fichas_en_barra() usado en tests."""
+        return self._en_barra
+
+    def fuera(self) -> int:
+        """Alias para get_fichas_fuera() usado en tests."""
+        return self._fuera
 
