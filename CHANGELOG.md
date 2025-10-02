@@ -3,6 +3,24 @@
 Todos los cambios importantes de este proyecto serán documentados en este archivo.  
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Liberado] - 2025-10-01
+
+### Agregado
+- Documentación completa del proyecto:
+  - `README.md` con descripción detallada del proyecto, estructura y características.
+  - `requirements.txt` con dependencias del proyecto (coverage).
+  - `justificacion.md` con justificación técnica del proyecto.
+- Archivos de documentación de desarrollo:
+  - `prompts-desarrollo.md` - Registro de prompts utilizados en el desarrollo.
+  - `prompts-documentacion.md` - Prompts para la documentación.
+  - `prompts-testing.md` - Prompts para testing y pruebas.
+
+### Mejorado
+- Cobertura de tests ampliada en `core/game.py` para alcanzar >90% de coverage.
+- Refinamiento de la lógica del juego con mejores validaciones.
+
+---
+
 ## [Liberado] - 2025-09-15
 
 ### Agregado
@@ -20,6 +38,51 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 - Corrección de errores de rango en `get_punto()` y validación de movimientos en `es_movimiento_valido()` e `intentar_mover()`.
+
+---
+
+## [Liberado] - 2025-09-10
+
+### Agregado
+- Implementación completa de la **Interfaz CLI** (`cli/CLI.py`):
+  - Interfaz de línea de comandos totalmente funcional para jugar Backgammon.
+  - Loop principal del juego con manejo de turnos.
+  - Entrada de usuario para movimientos (origen y destino).
+  - Opción para salir del juego en cualquier momento con comando 'salir'.
+  - Visualización del estado del tablero y información de turnos.
+  - Manejo de tiradas de dados y movimientos pendientes.
+
+### Mejorado
+- Refinamiento de todas las clases del core con correcciones de bugs.
+- Mejora en la validación de movimientos y manejo de errores.
+- Optimización de la lógica del tablero y posicionamiento de fichas.
+
+---
+
+## [Liberado] - 2025-09-05
+
+### Agregado
+- **Clase `Board` (Tablero)** (`core/board.py`):
+  - Representación completa del tablero de Backgammon con 24 puntos.
+  - Configuración inicial automática de fichas según reglas oficiales.
+  - Métodos para obtener información de puntos: `get_punto()`, `get_cantidad_fichas()`, `get_color_fichas()`.
+  - Validación de movimientos: `puede_mover_a()`, `es_movimiento_valido()`.
+  - Operaciones de fichas: `sacar_ficha()`, `mover_ficha()`.
+  - Soporte para bear-off y gestión de fichas en casa.
+  - Representación visual del tablero con `mostrar_tablero()`.
+
+- **Clase `Game` (Juego Principal)** (`core/game.py`):
+  - Lógica principal del juego de Backgammon.
+  - Gestión de turnos entre jugadores blanco y negro.
+  - Integración de dados, tablero y jugadores.
+  - Manejo de movimientos pendientes y validación.
+  - Detección de condiciones de victoria.
+  - Métodos para lanzar dados y realizar movimientos.
+
+### Mejorado
+- Completado el sistema de tests con mayor cobertura.
+- Refinamiento de la clase `Jugador` con métodos adicionales.
+- Mejoras en la clase `Ficha` para mejor integración con el tablero.
 
 ---
 
@@ -41,6 +104,26 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ---
 
+## [Liberado] - 2025-08-30
+
+### Agregado
+- **Suite completa de Tests Unitarios**:
+  - `test/test_dice.py` - Tests para la clase `Dado` con validación de tiradas y dobles.
+  - `test/test_player.py` - Tests extensivos para la clase `Jugador` incluyendo manejo de fichas en barra y bear-off.
+  - `test/test_checker.py` - Tests para la clase `Ficha` con todos los estados y transiciones.
+  - `test/test_board.py` - Tests para la clase `Board` con validación de movimientos y configuración inicial.
+  - `test/test_game.py` - Tests para la lógica principal del juego.
+  - Configuración inicial de coverage testing con herramientas de análisis.
+
+### Mejorado
+- Completada funcionalidad de la clase `Jugador`:
+  - Métodos para manejo de fichas: `agregar_ficha_barra()`, `quitar_ficha_barra()`.
+  - Métodos para bear-off: `agregar_ficha_fuera()`, `get_fichas_fuera()`.
+  - Lógica de victoria: `ha_ganado()` verifica si todas las fichas están fuera.
+  - Contadores de fichas: `get_fichas_en_barra()`.
+
+---
+
 ## [liberado] - 2025-08-29
 
 ### Agregado
@@ -58,9 +141,41 @@ El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Documentación inicial del proyecto
 
 ### Por hacer
-- Completar funcionalidad de la clase `Jugador`  
-- Implementar clase `Tablero`  
-- Crear clase `Juego` principal  
-- Desarrollar interfaz CLI  
-- Implementar tests unitarios
+- ~~Completar funcionalidad de la clase `Jugador`~~ ✅ Completado  
+- ~~Implementar clase `Tablero`~~ ✅ Completado  
+- ~~Crear clase `Juego` principal~~ ✅ Completado  
+- ~~Desarrollar interfaz CLI~~ ✅ Completado  
+- ~~Implementar tests unitarios~~ ✅ Completado
+- Desarrollar interfaz gráfica con Pygame (futuro)
+- Implementar funcionalidades avanzadas (doubling cube, match play)
+- Agregar inteligencia artificial para jugador automatizado
+
+---
+
+## [Estructura del Proyecto]
+
+```
+computacion-2025-backgammon-JoacoVanrell/
+├── core/                    # Lógica principal del juego
+│   ├── __init__.py         # Módulo core
+│   ├── board.py            # Clase Board (tablero)
+│   ├── checker.py          # Clase Ficha 
+│   ├── dice.py             # Clase Dado
+│   ├── game.py             # Clase Game (lógica principal)
+│   └── player.py           # Clase Jugador
+├── cli/                    # Interfaz de línea de comandos
+│   └── CLI.py              # Interfaz CLI funcional
+├── test/                   # Tests unitarios
+│   ├── test_board.py       # Tests del tablero
+│   ├── test_checker.py     # Tests de fichas
+│   ├── test_dice.py        # Tests de dados
+│   ├── test_game.py        # Tests del juego
+│   └── test_player.py      # Tests de jugadores
+├── pygame_ui/              # Interfaz gráfica (futuro)
+├── assets/                 # Recursos gráficos
+├── requirements.txt        # Dependencias del proyecto
+├── README.md              # Documentación principal
+├── CHANGELOG.md           # Este archivo
+└── justificacion.md       # Justificación técnica
+```
 
