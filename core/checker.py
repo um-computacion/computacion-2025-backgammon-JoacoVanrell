@@ -53,6 +53,10 @@ class Ficha:
                 and not self._en_barra
                 and not self._fuera_tablero)
 
+    def en_tablero(self) -> bool:
+        """Alias para esta_en_tablero() para consistencia con otros métodos."""
+        return self.esta_en_tablero()
+
     def __str__(self) -> str:
         """Cadena legible según el estado de la ficha."""
         if self._fuera_tablero:
@@ -72,6 +76,5 @@ class Ficha:
         return (self._color == otra._color
                 and self._posicion == otra._posicion
                 and self._en_barra == otra._en_barra
-
                 and self._fuera_tablero == otra._fuera_tablero)
 
