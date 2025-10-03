@@ -3,6 +3,16 @@
 Todos los cambios importantes de este proyecto serán documentados en este archivo.  
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Liberado] - 2025-10-03
+
+### Fixed
+- Corrección del test `test_captura_aumenta_barra_del_rival` en `test/test_game.py`:
+  - Agregado método `puede_bear_off()` faltante en el stub `_BoardStubCaptura`.
+  - El stub ahora devuelve `False` para simular que no es una situación de bear-off.
+  - Todos los 46 tests ahora pasan correctamente.
+
+---
+
 ## [Liberado] - 2025-10-01
 
 ### Agregado
