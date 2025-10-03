@@ -177,6 +177,7 @@ class TestGame(unittest.TestCase):
         def get_cantidad_fichas(self, p): return 1
         def get_color_fichas(self, p): return "blanco"
         def puede_mover_a(self, p, c): return True
+        def puede_bear_off(self, color): return False  # No es bear-off para este test
         def mover_ficha(self, o, d, c):
             from core.checker import Ficha
             return Ficha("negro")  # simula captura
