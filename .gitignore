@@ -1,0 +1,41 @@
+# Archivos del entorno virtual
+venv/
+env/
+ENV/
+backgammon-env/
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# IDE y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración local
+.env
+config.local.py
+
+# Archivos temporales
+*.tmp
+*.log
+
+# Archivos de testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Redis dump files (si usamos Redis)
+*.rdb
