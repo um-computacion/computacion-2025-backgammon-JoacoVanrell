@@ -3,6 +3,19 @@
 Todos los cambios importantes de este proyecto serán documentados en este archivo.  
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Liberado] - 2025-10-08
+
+### Agregado
+- Interfaz gráfica básica con pygame (`pygame_ui/`):
+  - Ventana de juego de 800x600 píxeles funcional.
+  - Tablero visual con los 24 puntos representados como triángulos.
+  - Colores alternados para puntos claros y oscuros.
+  - Barra central separando ambos lados del tablero.
+  - Layout simétrico siguiendo las reglas del Backgammon.
+- Dependencia pygame agregada a `requirements.txt`.
+
+---
+
 ## [Liberado] - 2025-10-03
 
 ### Fixed
