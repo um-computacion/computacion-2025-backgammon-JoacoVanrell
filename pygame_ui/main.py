@@ -16,6 +16,9 @@ DARK_TRIANGLE = (101, 67, 33)     # Marrón más oscuro para contraste
 FICHA_BLANCA = (245, 245, 245)    # Color de las fichas blancas
 FICHA_NEGRA = (60, 60, 60)        # Color de las fichas negras
 
+# Configurar fuente para texto
+font = pygame.font.Font(None, 36)
+
 # Bucle principal
 running = True
 while running:
@@ -94,6 +97,22 @@ while running:
     pygame.draw.circle(screen, BLACK, (punto24_x, punto24_y), ficha_radio, 2)
     pygame.draw.circle(screen, FICHA_NEGRA, (punto24_x, punto24_y + 30), ficha_radio)
     pygame.draw.circle(screen, BLACK, (punto24_x, punto24_y + 30), ficha_radio, 2)
+    
+    # Información del juego
+    info_x = 50
+    info_y = 480
+    
+    # Mostrar turno actual
+    turno_text = font.render("Turno: Jugador 1", True, BLACK)
+    screen.blit(turno_text, (info_x, info_y))
+    
+    # Mostrar dados
+    dados_text = font.render("Dados: 3, 5", True, BLACK)
+    screen.blit(dados_text, (info_x + 200, info_y))
+    
+    # Instrucciones
+    instrucciones_text = font.render("Haz clic para mover fichas", True, BLACK)
+    screen.blit(instrucciones_text, (info_x + 400, info_y))
     
     # Actualizar pantalla
     pygame.display.flip()
