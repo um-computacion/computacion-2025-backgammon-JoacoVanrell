@@ -3,6 +3,26 @@
 Todos los cambios importantes de este proyecto serán documentados en este archivo.  
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Liberado] - 2025-10-10
+
+### Agregado
+- Fichas básicas en la interfaz pygame (`pygame_ui/main.py`):
+  - Fichas representadas como círculos con bordes negros.
+  - Colores diferenciados: fichas blancas y fichas negras.
+  - Posicionamiento inicial de ejemplo en puntos 1 y 24.
+  - Radio de ficha configurable (15 píxeles).
+- Información del juego en pantalla:
+  - Indicador de turno actual del jugador.
+  - Visualización de valores de dados (valores fijos temporales).
+  - Instrucciones básicas para el usuario.
+  - Fuente configurada para texto legible.
+
+### Mejorado
+- Interfaz pygame con elementos informativos para mejor experiencia de usuario.
+- Organización visual del tablero con elementos de juego básicos.
+
+---
+
 ## [Liberado] - 2025-10-08
 
 ### Agregado
