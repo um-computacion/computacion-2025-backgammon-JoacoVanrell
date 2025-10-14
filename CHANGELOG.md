@@ -3,6 +3,40 @@
 Todos los cambios importantes de este proyecto serán documentados en este archivo.  
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Liberado] - 2025-10-14
+
+### Agregado
+- Interactividad completa con mouse en pygame (`pygame_ui/main.py`):
+  - Detección de clics en todas las fichas del tablero.
+  - Feedback visual con borde rojo cuando una ficha está seleccionada.
+  - Borde más grueso (4px) para destacar fichas seleccionadas.
+  - Variables de estado para tracking de selección (`ficha_seleccionada`).
+- Configuración inicial completa del Backgammon (30 fichas):
+  - **Fichas blancas**: punto 24 (2), punto 13 (5), punto 8 (3), punto 6 (5).
+  - **Fichas negras**: punto 1 (2), punto 12 (5), punto 17 (3), punto 19 (5).
+  - Posicionamiento correcto según reglas oficiales del Backgammon.
+  - Espaciado adecuado entre fichas apiladas (25 píxeles).
+- Funciones helper para código más limpio:
+  - `dibujar_ficha()`: Renderizado uniforme de fichas con selección.
+  - `clic_en_ficha()`: Detección de clics simplificada.
+- Sistema de nombres únicos para cada ficha (ej: `blanca_13_2`, `negra_17_1`).
+
+### Mejorado
+- Interfaz de información del juego optimizada:
+  - Texto de fichas seleccionadas más conciso (`"Seleccionada: Blanca P13"`).
+  - Mejor distribución del espacio en pantalla (sin superposiciones).
+  - Espaciado corregido entre elementos informativos.
+- Código más mantenible con funciones reutilizables.
+- Todas las 30 fichas del juego son completamente interactivas.
+
+### Corregido
+- Posicionamiento correcto de fichas según numeración del Backgammon.
+- Mapeo correcto entre puntos del tablero y posiciones visuales.
+- Detección de clics sincronizada con posiciones reales de las fichas.
+- Texto informativo que no se sale de los límites de la pantalla.
+
+---
+
 ## [Liberado] - 2025-10-10
 
 ### Agregado
