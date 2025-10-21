@@ -3,6 +3,45 @@
 Todos los cambios importantes de este proyecto serán documentados en este archivo.  
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Liberado] - 2025-10-21
+
+### Agregado
+- **Estructura modular profesional** para pygame (`pygame_ui/`):
+  - `constants.py`: Centralización de todas las constantes (colores profesionales, dimensiones, configuración).
+  - `board_renderer.py`: Clase `BoardRenderer` dedicada exclusivamente al renderizado del tablero.
+  - `event_handler.py`: Clase `EventHandler` para manejo modular de eventos de mouse y teclado.
+  - `game_state.py`: Clase `GameState` para gestión independiente del estado del juego.
+  - `main.py`: Refactorizado con clase `BackgammonGame` como coordinador principal.
+- **Arquitectura basada en separación de responsabilidades**:
+  - Cada clase tiene una función específica siguiendo el patrón del profesor.
+  - Sistema de hitmap profesional para detección precisa de clics.
+  - Colores profesionales (beige, marrones, dorados) para interface elegante.
+  - Resolución aumentada a 1000x700 píxeles para mejor experiencia visual.
+- **Funcionalidades mejoradas**:
+  - Sistema de selección visual con highlighting rojo de fichas.
+  - Controles de teclado: ESPACIO (dados), ESC/Q (salir), R (reiniciar), H (ayuda).
+  - Apilamiento inteligente de fichas con contadores cuando exceden límite visual.
+  - Etiquetas de puntos (1-24) correctamente posicionadas.
+  - Manejo de errores estructurado y mensajes informativos.
+
+### Mejorado
+- **Código más mantenible**:
+  - Reducción de líneas en main.py (169 agregadas, 234 eliminadas).
+  - Documentación completa con docstrings en español.
+  - Estructura modular facilita debugging y extensiones futuras.
+- **Experiencia de usuario profesional**:
+  - Interface limpia con información clara del estado del juego.
+  - Feedback visual inmediato para todas las acciones.
+  - Rendering optimizado a 60 FPS para fluidez.
+
+### Técnico
+- **Commits organizados** en branch `69-crear-nueva-estructura-despues-de-la-clase-del-profesor`:
+  - Commit 1 (`49a5c42`): Estructura base con 4 módulos nuevos (550 líneas).
+  - Commit 2 (`6dfba64`): Integración de main.py con arquitectura modular.
+- **Arquitectura escalable** preparada para futuras integraciones con el módulo `core`.
+
+---
+
 ## [Liberado] - 2025-10-14
 
 ### Agregado
