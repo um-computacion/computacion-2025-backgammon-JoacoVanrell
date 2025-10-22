@@ -10,9 +10,9 @@ import sys
 
 # Importar nuestros módulos
 from constants import *
-from board_renderer import BoardRenderer
-from event_handler import EventHandler
-from game_state import GameState
+from board_renderer import RenderizadorTablero
+from event_handler import ManejadorEventos
+from game_state import EstadoJuego
 
 
 class BackgammonGame:
@@ -37,27 +37,27 @@ class BackgammonGame:
         self.small_font = pygame.font.Font(None, SMALL_FONT_SIZE)
         
         # Inicializar componentes
-        self.game_state = GameState()
-        self.board_renderer = BoardRenderer()
-        self.event_handler = EventHandler()
+        self.estado_juego = EstadoJuego()
+        self.renderizador_tablero = RenderizadorTablero()
+        self.manejador_eventos = ManejadorEventos()
         
         # Variables de estado
         self.hitmap = {}
     
     def _render_ui_info(self):
         """Renderiza información del juego en la parte superior"""
-        info = self.game_state.get_game_info()
+        info = self.estado_juego.obtener_info_juego()
         
         # Información del jugador actual
-        player_text = f"Turno: Jugador {info['current_player'].capitalize()}"
+        player_text = f"Turno: Jugador {info['jugador_actual'].capitalize()}"
         text_surface = self.font.render(player_text, True, TEXT_COLOR)
         self.screen.blit(text_surface, (20, 10))
         
         # Información de dados
-        if info['dice_values']:
-            dice_text = f"Dados: {info['dice_values'][0]}, {info['dice_values'][1]}"
-            if info['moves_remaining'] > 0:
-                dice_text += f" (Movimientos: {info['moves_remaining']})"
+        if info['valores_dados']:
+            dice_text = f"Dados: {info['valores_dados'][0]}, {info['valores_dados'][1]}"
+            if info['movimientos_restantes'] > 0:
+                dice_text += f" (Movimientos: {info['movimientos_restantes']})"
         else:
             dice_text = "Presiona ESPACIO para lanzar dados"
         
@@ -65,15 +65,15 @@ class BackgammonGame:
         self.screen.blit(text_surface, (300, 10))
         
         # Información de selección
-        selected = self.event_handler.get_selected_point()
-        if selected:
-            checkers = self.game_state.get_checkers_at_point(selected)
-            if checkers:
-                color = checkers[0]
-                count = len(checkers)
-                selection_text = f"Punto {selected}: {count} ficha(s) {color}"
+        seleccionado = self.manejador_eventos.obtener_punto_seleccionado()
+        if seleccionado:
+            fichas = self.estado_juego.get_checkers_at_point(seleccionado)
+            if fichas:
+                color = fichas[0]
+                count = len(fichas)
+                selection_text = f"Punto {seleccionado}: {count} ficha(s) {color}"
             else:
-                selection_text = f"Punto {selected}: vacío"
+                selection_text = f"Punto {seleccionado}: vacío"
         else:
             selection_text = "Haz clic en una ficha para seleccionar"
         
@@ -100,34 +100,34 @@ class BackgammonGame:
     def _handle_game_actions(self, actions):
         """Procesa las acciones generadas por el event handler"""
         for action in actions:
-            if action['action'] == 'quit':
+            if action['accion'] == 'salir':
                 return False
             
-            elif action['action'] == 'select':
-                point = action['point']
-                self.board_renderer.set_selected_point(point)
+            elif action['accion'] == 'seleccionar':
+                point = action['punto']
+                self.renderizador_tablero.establecer_punto_seleccionado(point)
                 print(f"Punto seleccionado: {point}")
                 
                 # Mostrar información de las fichas en el punto
-                checkers = self.game_state.get_checkers_at_point(point)
-                if checkers:
-                    print(f"  - {len(checkers)} ficha(s) {checkers[0]}")
+                fichas = self.estado_juego.get_checkers_at_point(point)
+                if fichas:
+                    print(f"  - {len(fichas)} ficha(s) {fichas[0]}")
             
-            elif action['action'] == 'deselect':
-                self.board_renderer.set_selected_point(None)
+            elif action['accion'] == 'deseleccionar':
+                self.renderizador_tablero.establecer_punto_seleccionado(None)
                 print("Punto deseleccionado")
             
-            elif action['action'] == 'roll_dice':
-                dice = self.game_state.roll_dice()
-                print(f"Dados lanzados: {dice}")
+            elif action['accion'] == 'tirar_dados':
+                dados = self.estado_juego.tirar_dados()
+                print(f"Dados lanzados: {dados}")
             
-            elif action['action'] == 'reset_game':
-                self.game_state.reset_game()
-                self.board_renderer.set_selected_point(None)
-                self.event_handler.reset_selection()
+            elif action['accion'] == 'reiniciar_juego':
+                self.estado_juego.reiniciar_juego()
+                self.renderizador_tablero.establecer_punto_seleccionado(None)
+                self.manejador_eventos.limpiar_seleccion()
                 print("Juego reiniciado")
             
-            elif action['action'] == 'show_help':
+            elif action['accion'] == 'mostrar_ayuda':
                 print("=== AYUDA ===")
                 print("ESPACIO: Lanzar dados")
                 print("Clic: Seleccionar ficha")
@@ -142,16 +142,16 @@ class BackgammonGame:
         print("Estructura profesional basada en el ejemplo del profesor")
         print("Presiona H para ver la ayuda completa")
         
-        while self.event_handler.is_running():
+        while self.manejador_eventos.esta_ejecutandose():
             # Procesar eventos
-            actions = self.event_handler.process_events(self.hitmap)
-            if not self._handle_game_actions(actions):
+            acciones = self.manejador_eventos.procesar_eventos(self.hitmap)
+            if not self._handle_game_actions(acciones):
                 break
             
             # Renderizar tablero
-            self.hitmap = self.board_renderer.render_board(
+            self.hitmap = self.renderizador_tablero.renderizar_tablero(
                 self.screen, 
-                self.game_state, 
+                self.estado_juego, 
                 self.font
             )
             
