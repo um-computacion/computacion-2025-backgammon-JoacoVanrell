@@ -7,122 +7,122 @@ import pygame
 from constants import *
 
 
-class EventHandler:
+class ManejadorEventos:
     """
     Clase responsable de manejar todos los eventos de pygame
     Sigue el patrón del profesor: cada clase tiene una responsabilidad específica
     """
     
     def __init__(self):
-        self.running = True
-        self.selected_point = None
-        self.last_click_pos = None
+        self.ejecutandose = True
+        self.punto_seleccionado = None
+        self.ultima_posicion_clic = None
     
-    def is_running(self):
+    def esta_ejecutandose(self):
         """Retorna si la aplicación debe seguir ejecutándose"""
-        return self.running
+        return self.ejecutandose
     
-    def get_selected_point(self):
+    def obtener_punto_seleccionado(self):
         """Retorna el punto actualmente seleccionado"""
-        return self.selected_point
+        return self.punto_seleccionado
     
-    def _hit_test(self, hitmap, pos):
+    def _detectar_clic_en_ficha(self, mapa_clics, posicion):
         """
         Detecta si un clic intersecta con alguna ficha
         Retorna el número del punto o None
         """
-        click_x, click_y = pos
+        clic_x, clic_y = posicion
         
-        for point_number, checkers in hitmap.items():
-            for checker_x, checker_y, radius in checkers:
+        for numero_punto, fichas in mapa_clics.items():
+            for ficha_x, ficha_y, radio in fichas:
                 # Calcular distancia del clic al centro de la ficha
-                distance_squared = (click_x - checker_x) ** 2 + (click_y - checker_y) ** 2
-                if distance_squared <= radius ** 2:
-                    return point_number
+                distancia_cuadrada = (clic_x - ficha_x) ** 2 + (clic_y - ficha_y) ** 2
+                if distancia_cuadrada <= radio ** 2:
+                    return numero_punto
         
         return None
     
-    def handle_mouse_click(self, pos, hitmap):
+    def manejar_clic_mouse(self, posicion, mapa_clics):
         """
         Maneja clics del mouse en el tablero
-        pos: posición del clic (x, y)
-        hitmap: mapa de posiciones de fichas para detección de colisiones
+        posicion: posición del clic (x, y)
+        mapa_clics: mapa de posiciones de fichas para detección de colisiones
         """
-        self.last_click_pos = pos
-        clicked_point = self._hit_test(hitmap, pos)
+        self.ultima_posicion_clic = posicion
+        punto_clickeado = self._detectar_clic_en_ficha(mapa_clics, posicion)
         
-        if clicked_point is not None:
-            if self.selected_point == clicked_point:
+        if punto_clickeado is not None:
+            if self.punto_seleccionado == punto_clickeado:
                 # Clic en el mismo punto: deseleccionar
-                self.selected_point = None
-                return {'action': 'deselect', 'point': clicked_point}
+                self.punto_seleccionado = None
+                return {'accion': 'deseleccionar', 'punto': punto_clickeado}
             else:
                 # Clic en punto diferente: seleccionar nuevo
-                old_selection = self.selected_point
-                self.selected_point = clicked_point
+                seleccion_anterior = self.punto_seleccionado
+                self.punto_seleccionado = punto_clickeado
                 return {
-                    'action': 'select', 
-                    'point': clicked_point, 
-                    'previous': old_selection
+                    'accion': 'seleccionar', 
+                    'punto': punto_clickeado, 
+                    'anterior': seleccion_anterior
                 }
         else:
             # Clic en área vacía: deseleccionar
-            if self.selected_point is not None:
-                old_selection = self.selected_point
-                self.selected_point = None
-                return {'action': 'deselect', 'point': old_selection}
+            if self.punto_seleccionado is not None:
+                seleccion_anterior = self.punto_seleccionado
+                self.punto_seleccionado = None
+                return {'accion': 'deseleccionar', 'punto': seleccion_anterior}
         
-        return {'action': 'none'}
+        return {'accion': 'ninguna'}
     
-    def handle_keyboard(self, key):
+    def manejar_teclado(self, tecla):
         """
         Maneja eventos de teclado
-        key: tecla presionada
+        tecla: tecla presionada
         """
-        if key == pygame.K_ESCAPE or key == pygame.K_q:
-            self.running = False
-            return {'action': 'quit'}
+        if tecla == pygame.K_ESCAPE or tecla == pygame.K_q:
+            self.ejecutandose = False
+            return {'accion': 'salir'}
         
-        elif key == pygame.K_SPACE:
-            return {'action': 'roll_dice'}
+        elif tecla == pygame.K_SPACE:
+            return {'accion': 'tirar_dados'}
         
-        elif key == pygame.K_r:
-            return {'action': 'reset_game'}
+        elif tecla == pygame.K_r:
+            return {'accion': 'reiniciar_juego'}
         
-        elif key == pygame.K_h:
-            return {'action': 'show_help'}
+        elif tecla == pygame.K_h:
+            return {'accion': 'mostrar_ayuda'}
         
-        return {'action': 'none'}
+        return {'accion': 'ninguna'}
     
-    def process_events(self, hitmap=None):
+    def procesar_eventos(self, mapa_clics=None):
         """
         Procesa todos los eventos pendientes de pygame
         Retorna una lista de acciones a realizar
         """
-        actions = []
+        acciones = []
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-                actions.append({'action': 'quit'})
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                self.ejecutandose = False
+                acciones.append({'accion': 'salir'})
             
-            elif event.type == pygame.KEYDOWN:
-                action = self.handle_keyboard(event.key)
-                if action['action'] != 'none':
-                    actions.append(action)
+            elif evento.type == pygame.KEYDOWN:
+                accion = self.manejar_teclado(evento.key)
+                if accion['accion'] != 'ninguna':
+                    acciones.append(accion)
             
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1 and hitmap is not None:  # Clic izquierdo
-                    action = self.handle_mouse_click(event.pos, hitmap)
-                    if action['action'] != 'none':
-                        actions.append(action)
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                if evento.button == 1 and mapa_clics is not None:  # Clic izquierdo
+                    accion = self.manejar_clic_mouse(evento.pos, mapa_clics)
+                    if accion['accion'] != 'ninguna':
+                        acciones.append(accion)
             
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 3:  # Clic derecho
-                    actions.append({'action': 'right_click', 'pos': event.pos})
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                if evento.button == 3:  # Clic derecho
+                    acciones.append({'accion': 'clic_derecho', 'posicion': evento.pos})
         
-        return actions
+        return acciones
     
-    def reset_selection(self):
+    def limpiar_seleccion(self):
         """Limpia la selección actual"""
-        self.selected_point = None
+        self.punto_seleccionado = None
