@@ -17,13 +17,6 @@ El objetivo era aprender a:
 - Escribir tests para verificar que todo funciona
 - Documentar el código y el proyecto
 
-### Lo que hace el juego:
-- Tablero de Backgammon con 24 puntos
-- Fichas que se pueden mover, capturar y sacar del tablero
-- Dados que se lanzan para determinar los movimientos
-- Turnos entre dos jugadores (blanco y negro)
-- Reglas básicas del Backgammon (movimientos, capturas, bear-off)
-- Interfaz simple en la terminal para jugar
 
 ---
 

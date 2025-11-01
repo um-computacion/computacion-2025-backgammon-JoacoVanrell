@@ -21,37 +21,51 @@ def main() -> None:
         if not game.movimientos_disponibles():
             tirada = game.lanzar_dados()
             print(f"Tirada de dados: {tirada}")
-        else:
-            print(f"Movimientos pendientes: {game.movimientos_disponibles()}")
 
-        # Solicitar punto de origen
+        if not game.movimientos_disponibles():
+            print("No tienes movimientos posibles, se cede el turno.")
+            game.terminar_turno()
+            continue
+        
+        print(f"Movimientos pendientes: {game.movimientos_disponibles()}")
+
+        # Lógica de reingreso desde la barra
+        if jugador.get_fichas_en_barra() > 0:
+            print(f"Tenes {jugador.get_fichas_en_barra()} ficha(s) en la barra.")
+            dado_input = input("Elige un dado para reingresar (o 'salir'): ").strip()
+            if dado_input.lower() == "salir":
+                break
+            try:
+                pasos = int(dado_input)
+                game.reingresar_ficha(pasos)
+            except ValueError as e:
+                print(f"Error al reingresar: {e}")
+            continue
+
+        # Solicitar movimiento normal
         origen_input = input("Origen (1-24, o 'salir'): ").strip()
         if origen_input.lower() == "salir":
-            print("Saliendo del juego...")
             break
         try:
             origen = int(origen_input)
         except ValueError:
-            print("Origen inválido. Ingresá un número entre 1 y 24.")
+            print("Origen inválido.")
             continue
 
-        # Solicitar punto de destino
-        destino_input = input("Destino (1-24, o 'salir'): ").strip()
-        if destino_input.lower() == "salir":
-            print("Saliendo del juego...")
-            break
+        destino_input = input("Destino (1-24): ").strip()
         try:
             destino = int(destino_input)
         except ValueError:
-            print("Destino inválido. Ingresá un número entre 1 y 24.")
+            print("Destino inválido.")
             continue
 
         # Intentar movimiento
         try:
-            game.mover(origen, destino)
+            turno_terminado = game.mover(origen, destino)
+            if turno_terminado:
+                print("Turno completado.")
         except ValueError as e:
             print(f"Movimiento inválido: {e}")
-            continue
 
 
 if __name__ == "__main__":

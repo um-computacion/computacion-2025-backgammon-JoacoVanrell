@@ -1,5 +1,7 @@
 import unittest
 from core.game import Game
+from core.board import Board
+from core.checker import Ficha
 
 class TestGame(unittest.TestCase):
 
@@ -229,6 +231,96 @@ class TestGame(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             g.mover(6, 0)  # destino 0 inválido para CLI
         self.assertIn("Destino fuera del tablero y no es bear-off válido", str(cm.exception))
+
+    def test_get_ganador_negro(self):
+        g = Game()
+        for _ in range(g.negro.TOTAL_FICHAS):
+            g.negro.agregar_fuera()
+        self.assertTrue(g.ha_terminado())
+        self.assertEqual(g.get_ganador(), g.negro.get_nombre())
+
+    def test_sin_movimientos_validos_por_bloqueo(self):
+        g = Game()
+        # Tablero vacío, una ficha blanca en 6
+        g.tablero._puntos = [[] for _ in range(25)]
+        g.tablero._puntos[6] = [Ficha("blanco")]
+        # Puntos 5 y 4 (destinos) bloqueados por negras
+        g.tablero._puntos[5] = [Ficha("negro"), Ficha("negro")]
+        g.tablero._puntos[4] = [Ficha("negro"), Ficha("negro")]
+        
+        g.dados.set_proximas_tiradas([(1, 2)])
+        g.iniciar_turno()
+        # No hay movimientos válidos, la lista debe estar vacía
+        self.assertTrue(g.sin_movimientos())
+
+    def test_reingresar_ficha_bloqueada(self):
+        g = Game()
+        g.blanco.agregar_a_barra()
+        # Bloqueamos las casillas 1 y 2 para las blancas
+        g.tablero._puntos[1] = [Ficha("negro"), Ficha("negro")]
+        g.tablero._puntos[2] = [Ficha("negro"), Ficha("negro")]
+
+        g.dados.set_proximas_tiradas([(1, 2)])
+        g.iniciar_turno()
+        # No hay movimientos de reingreso válidos
+        self.assertTrue(g.sin_movimientos())
+
+    def test_intentar_mover_con_origen_del_rival(self):
+        g = Game()
+        g._mov_pendientes = [1]
+        # El punto 1 tiene fichas negras, el turno es de blancas
+        with self.assertRaises(ValueError) as cm:
+            g.intentar_mover(1, 1)
+        self.assertIn("No hay fichas blanco en el punto 1", str(cm.exception))
+
+class TestBearOff(unittest.TestCase):
+
+    def setUp(self):
+        self.game = Game()
+        self.board = self.game.tablero
+        # Limpiamos el tablero para configurarlo a nuestro gusto
+        self.board._puntos = [[] for _ in range(25)]
+
+    def test_no_puede_sacar_si_fichas_fuera_de_casa(self):
+        # 14 fichas en casa, 1 fuera
+        self.board._puntos[1] = [Ficha("blanco") for _ in range(14)]
+        self.board._puntos[7] = [Ficha("blanco")]
+        self.assertFalse(self.board.puede_bear_off("blanco"))
+
+    def test_puede_sacar_si_todas_las_fichas_en_casa(self):
+        # Todas las 15 fichas en casa
+        self.board._puntos[1] = [Ficha("blanco") for _ in range(10)]
+        self.board._puntos[5] = [Ficha("blanco") for _ in range(5)]
+        self.assertTrue(self.board.puede_bear_off("blanco"))
+
+    def test_sacar_ficha_con_valor_exacto(self):
+        # 2 fichas en casa
+        self.board._puntos[4] = [Ficha("blanco")]
+        self.board._puntos[2] = [Ficha("blanco")]
+        
+        self.game.dados.set_proximas_tiradas([(4, 2)])
+        self.game.iniciar_turno() # Movimientos: [4, 2]
+        
+        self.game.intentar_mover(4, 4)
+        self.assertEqual(self.game.blanco.get_fichas_fuera(), 1)
+        self.assertEqual(len(self.game.movimientos_disponibles()), 1)
+
+        self.game.intentar_mover(2, 2)
+        self.assertEqual(self.game.blanco.get_fichas_fuera(), 2)
+        self.assertTrue(self.game.sin_movimientos())
+
+    def test_sacar_ficha_con_dado_mayor_si_no_hay_mas_altas(self):
+        # Fichas en 3 y 2. Dado de 5. Debe sacar la del 3.
+        self.board._puntos[3] = [Ficha("blanco")]
+        self.board._puntos[2] = [Ficha("blanco")]
+
+        self.game.dados.set_proximas_tiradas([(5, 1)])
+        self.game.iniciar_turno() # Movimientos: [5, 1]
+
+        # Con un 5, y la ficha más alta en el 3, se puede sacar
+        self.game.intentar_mover(3, 5)
+        self.assertEqual(self.game.blanco.get_fichas_fuera(), 1)
+        self.assertEqual(self.board.get_cantidad_fichas(3), 0)
 
 
 
