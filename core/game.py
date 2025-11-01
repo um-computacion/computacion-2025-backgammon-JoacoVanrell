@@ -52,6 +52,10 @@ class Game:
             self._mov_pendientes = [d1] * 4
         else:
             self._mov_pendientes = [v for v in (d1, d2) if v > 0]
+        
+        if not self._validar_movimientos_posibles():
+            self._mov_pendientes.clear()
+
         return (d1, d2)
 
     def movimientos_disponibles(self) -> List[int]:
@@ -88,6 +92,32 @@ class Game:
         destino = self._destino(origen, pasos)
         return destino < 1 or destino > 24
 
+    def _validar_movimientos_posibles(self) -> bool:
+        """
+        Verifica si el jugador actual tiene algún movimiento legal.
+        - Si hay fichas en la barra, solo valida reingresos.
+        - Si no, busca cualquier movimiento válido en el tablero.
+        """
+        # Si hay fichas en la barra, solo se pueden reingresar
+        if self.jugador_actual().get_fichas_en_barra() > 0:
+            for pasos in set(self._mov_pendientes):
+                destino = pasos if self.turno == "blanco" else 25 - pasos
+                if self.tablero.puede_mover_a(destino, self.turno):
+                    return True
+            return False
+
+        # Si no hay fichas en la barra, buscar cualquier movimiento legal
+        for origen in range(1, 25):
+            if self.tablero.get_color_fichas(origen) == self.turno:
+                for pasos in set(self._mov_pendientes):
+                    if self._puede_bear_off_desde(origen, pasos):
+                        return True
+                    destino = self._destino(origen, pasos)
+                    if (1 <= destino <= 24 and
+                        self.tablero.puede_mover_a(destino, self.turno)):
+                        return True
+        return False
+
     def _consumir(self, pasos: int) -> bool:
         """
         Quita el valor de dado usado de la lista.
@@ -99,11 +129,37 @@ class Game:
         except ValueError:
             return False
 
+    def reingresar_ficha(self, pasos: int) -> None:
+        """
+        Intenta reingresar una ficha desde la barra.
+        Lanza ValueError con mensaje en cualquier error.
+        """
+        if self.jugador_actual().get_fichas_en_barra() == 0:
+            raise ValueError("No tienes fichas en la barra.")
+        if pasos not in self._mov_pendientes:
+            raise ValueError("Ese valor de dado no está disponible.")
+
+        # Blanco: destino es el número de dado; Negro: 25 - dado
+        destino = pasos if self.turno == "blanco" else 25 - pasos
+        
+        # Crear una ficha nueva para colocar en el tablero
+        ficha = Ficha(self.turno)
+        captura = self.tablero.colocar_ficha(ficha, destino)
+
+        if captura:
+            self.jugador_rival().agregar_a_barra()
+        
+        self.jugador_actual().sacar_de_barra()
+        self._consumir(pasos)
+
     def intentar_mover(self, origen: int, pasos: int) -> None:
         """
         Intenta mover una ficha.
         Lanza ValueError con mensaje en cualquier error.
         """
+        if self.jugador_actual().get_fichas_en_barra() > 0:
+            raise ValueError(
+                "Debes reingresar todas las fichas de la barra primero.")
         if pasos <= 0:
             raise ValueError("Los pasos deben ser positivos")
         if pasos not in self._mov_pendientes:
@@ -145,17 +201,21 @@ class Game:
         movs = self.movimientos_disponibles()
         return (movs[0], movs[1] if len(movs) > 1 else 0)
 
-    def mover(self, origen: int, destino: int) -> None:
+    def mover(self, origen: int, destino: int) -> bool:
         """
         Alias CLI: calcula pasos según color, llama intentar_mover
         y termina turno si no quedan movimientos.
+        Devuelve True si el turno ha terminado.
         """
         pasos = (origen - destino) if self.turno == "blanco" else (destino - origen)
         if pasos <= 0:
             raise ValueError("Dirección inválida para este color")
         self.intentar_mover(origen, pasos)
+
         if self.sin_movimientos() and not self.ha_terminado():
             self.terminar_turno()
+            return True
+        return False
 
     def mostrar_tablero(self) -> str:
         """Alias CLI: devuelve la cadena de tablero actual."""

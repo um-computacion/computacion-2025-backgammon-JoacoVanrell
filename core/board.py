@@ -80,6 +80,29 @@ class Board:
             raise ValueError(f"No hay fichas en el punto {punto_origen}")
         return self._puntos[punto_origen].pop()
 
+    def colocar_ficha(self, ficha: Ficha, punto_destino: int) -> Optional[Ficha]:
+        """
+        Coloca una ficha en un punto, manejando la captura.
+        - Valida si el destino es válido.
+        - Captura una ficha rival si es un 'blot'.
+        Devuelve la ficha capturada o None.
+        """
+        color_jugador = ficha.get_color()
+        if not self.puede_mover_a(punto_destino, color_jugador):
+            raise ValueError(f"El punto {punto_destino} está bloqueado")
+
+        # Captura de rival
+        captura = None
+        if (self.get_cantidad_fichas(punto_destino) == 1 and
+            self.get_color_fichas(punto_destino) != color_jugador):
+            captura = self.sacar_ficha(punto_destino)
+            captura.mover_a_barra()
+
+        # Colocar ficha en destino
+        ficha.set_posicion(punto_destino)
+        self._puntos[punto_destino].append(ficha)
+        return captura
+
     def mover_ficha(self,
                    punto_origen: int,
                    punto_destino: int,
@@ -97,23 +120,10 @@ class Board:
             raise ValueError(f"No hay fichas en el punto {punto_origen}")
         if self.get_color_fichas(punto_origen) != color_jugador:
             raise ValueError(f"No hay fichas {color_jugador} en el punto {punto_origen}")
-        if not self.puede_mover_a(punto_destino, color_jugador):
-            raise ValueError(f"El punto {punto_destino} está bloqueado")
 
-        # Sacar ficha del origen
+        # Sacar ficha del origen y colocarla en destino
         ficha = self.sacar_ficha(punto_origen)
-
-        # Captura de rival
-        captura = None
-        if (self.get_cantidad_fichas(punto_destino) == 1 and
-            self.get_color_fichas(punto_destino) != color_jugador):
-            captura = self.sacar_ficha(punto_destino)
-            captura.mover_a_barra()
-
-        # Colocar ficha en destino
-        ficha.set_posicion(punto_destino)
-        self._puntos[punto_destino].append(ficha)
-        return captura
+        return self.colocar_ficha(ficha, punto_destino)
 
     def get_fichas_en_casa(self, color_jugador: str) -> int:
         """
