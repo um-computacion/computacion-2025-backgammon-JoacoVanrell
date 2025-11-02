@@ -1,0 +1,23 @@
+# Dimensiones de la ventana (aumentadas ~20%)
+WIDTH = 960
+HEIGHT = 780 # 720 para el tablero + 60 para el footer
+
+# Colores (extraídos de la imagen de referencia)
+COLOR_FONDO = (240, 230, 210)
+COLOR_TRIANGULO_1 = (181, 136, 99)
+COLOR_TRIANGULO_2 = (240, 217, 181)
+COLOR_FICHA_BLANCA = (255, 255, 255)
+COLOR_FICHA_NEGRA = (0, 0, 0)
+COLOR_TEXTO = (0, 0, 0)
+
+# Geometría del tablero
+MARGEN_TABLERO = 20
+ANCHO_BARRA = 50
+ANCHO_TRIANGULO = (WIDTH - 2 * MARGEN_TABLERO - ANCHO_BARRA) // 12
+ALTO_TRIANGULO = (HEIGHT - 50) // 2 - MARGEN_TABLERO
+RADIO_FICHA = ANCHO_TRIANGULO // 2 - 5
+
+# Fuentes
+FUENTE_GRANDE = 36
+FUENTE_MEDIANA = 24
+FUENTE_PEQUENA = 18
