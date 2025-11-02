@@ -3,6 +3,65 @@
 Todos los cambios importantes de este proyecto serán documentados en este archivo.  
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Liberado] - 2025-11-01
+
+### Agregado
+- **Interfaz Pygame completamente funcional**:
+  - Sistema completo de juego interactivo con mouse
+  - Lanzamiento de dados por clic cuando no hay movimientos pendientes
+  - Selección de fichas con destacado visual (borde rojo)
+  - Manejo de reingreso desde barra con prioridad obligatoria
+  - Pantalla de victoria con mensaje del ganador y opción de reiniciar
+  - Mensajes informativos en tiempo real para todas las acciones
+- **Validación de movimientos posibles**:
+  - Método `_validar_movimientos_posibles()` en `Game` que verifica si hay movimientos legales
+  - Sistema automático de pasar turno cuando no hay movimientos disponibles
+  - Prevención de turnos imposibles que mejora la experiencia de juego
+- **Herramientas de calidad de código**:
+  - Configuración de pylint con `.pylintrc` (score mínimo 8.0/10)
+  - Agregado pylint a `requirements.txt`
+  - Dockerfile para ejecución en contenedor (opcional)
+
+### Mejorado
+- **Game.py refactorizado**:
+  - Separación de responsabilidades con métodos privados `_dir()`, `_destino()`, `_puede_bear_off_desde()`
+  - Sistema robusto de movimientos pendientes que se limpian correctamente al terminar turno
+  - Mejor integración entre lanzamiento de dados y validación de movimientos
+  - Type hints completos para mejor documentación del código
+- **CLI mejorado**:
+  - Mensajes más claros sobre el estado del juego
+  - Manejo robusto de errores con try-except
+  - Opción de salir en cualquier momento del juego
+- **Pygame UI optimizado**:
+  - Función `mostrar_pantalla_final()` para pantalla de victoria
+  - Sistema de reinicio de partida sin cerrar la ventana
+  - Manejo correcto del ciclo de vida del juego (game loop externo e interno)
+  - Integración limpia con el módulo core sin dependencias cruzadas
+
+### Documentación
+- **README.md actualizado** con:
+  - Instrucciones completas de instalación y uso
+  - Comandos para ejecutar tests y coverage
+  - Instrucciones de uso de pylint
+  - Controles del juego Pygame
+  - Sección de arquitectura y diseño
+  - Estadísticas del proyecto
+- **justificacion.md ampliado** con:
+  - Detalles de implementación de pygame_ui
+  - Justificación de decisiones de diseño en Game
+  - Explicación del flujo de integración entre capas
+  - Sección sobre manejo de casos especiales
+  - Estrategia completa de testing
+
+### Técnico
+- **54 tests unitarios** todos pasando correctamente
+- **Cobertura >90%** en módulo core
+- **Pylint score ≥8.0** en core y cli
+- Arquitectura modular completa con separación core/UI
+- Sistema de tipos con type hints para mejor mantenibilidad
+
+---
+
 ## [Liberado] - 2025-10-21
 
 ### Agregado

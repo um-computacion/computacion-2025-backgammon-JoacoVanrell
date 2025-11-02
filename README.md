@@ -9,57 +9,87 @@
 ---
 
 ## Descripción
-Este es mi proyecto final de la materia Computación I. Implementé el juego **Backgammon** en Python usando programación orientada a objetos.
 
-El objetivo era aprender a:
-- Organizar el código en clases y módulos
-- Separar la lógica del juego de la interfaz
-- Escribir tests para verificar que todo funciona
-- Documentar el código y el proyecto
+Este es mi proyecto final de la materia Computación I. Implementé el juego **Backgammon** en Python utilizando programación orientada a objetos, siguiendo las mejores prácticas de desarrollo de software.
 
+### Objetivos del proyecto:
+- Implementar las reglas completas del Backgammon
+- Aplicar conceptos de POO (clases, herencia, encapsulación)
+- Separar la lógica del juego de las interfaces
+- Escribir tests unitarios completos
+- Mantener código limpio y documentado
+- Usar herramientas de calidad de código (pylint, coverage)
+
+### Características implementadas:
+- ✅ Tablero de Backgammon con 24 puntos
+- ✅ Movimiento de fichas con validación de reglas
+- ✅ Sistema de captura y barra
+- ✅ Bear-off (sacar fichas del tablero)
+- ✅ Dados con soporte para dobles
+- ✅ Detección de victoria
+- ✅ Interfaz CLI funcional
+- ✅ Interfaz gráfica con Pygame
+- ✅ 54 tests unitarios (100% aprobados)
+- ✅ Cobertura de código >90%
+- ✅ Código validado con pylint (score ≥8.0)
 
 ---
 
-## Cómo está organizado el proyecto
+## Estructura del proyecto
 
 ```
-proyecto/
-├── core/                    # Aquí está toda la lógica del juego
-│   ├── board.py            # El tablero de 24 puntos
-│   ├── checker.py          # Las fichas del juego
-│   ├── dice.py             # Los dados
-│   ├── game.py             # La lógica principal del juego
-│   └── player.py           # Los jugadores
-├── cli/                     # La interfaz para jugar en terminal
-│   └── CLI.py              # El programa que ejecutas para jugar
-├── test/                    # Tests para verificar que todo funciona
+computacion-2025-backgammon-JoacoVanrell/
+├── core/                    # Lógica del juego (independiente de UI)
+│   ├── __init__.py
+│   ├── board.py            # Tablero (24 puntos, validaciones)
+│   ├── checker.py          # Fichas (estado, posición)
+│   ├── dice.py             # Dados (tiradas, dobles)
+│   ├── game.py             # Juego (turnos, reglas, victoria)
+│   └── player.py           # Jugadores (color, nombre, contadores)
+│
+├── cli/                     # Interfaz de línea de comandos
+│   └── CLI.py              # Programa principal CLI
+│
+├── pygame_ui/               # Interfaz gráfica con Pygame
+│   ├── __init__.py
+│   ├── main.py             # Programa principal Pygame
+│   ├── constants.py        # Constantes visuales
+│   ├── drawing.py          # Renderizado del tablero
+│
+├── test/                    # Tests unitarios
+│   ├── __init__.py
 │   ├── test_board.py       # Tests del tablero
 │   ├── test_checker.py     # Tests de las fichas
 │   ├── test_dice.py        # Tests de los dados
 │   ├── test_game.py        # Tests del juego
 │   └── test_player.py      # Tests de los jugadores
-├── requirements.txt         # Programas extra que necesitas instalar
-├── README.md               # Este archivo
-├── CHANGELOG.md            # Lista de cambios que fui haciendo
-└── justificacion.md        # Explico por qué hice las cosas así
+│
+├── .pylintrc               # Configuración de pylint
+├── .coveragerc             # Configuración de coverage
+├── requirements.txt        # Dependencias del proyecto
+├── README.md              # Este archivo
+├── CHANGELOG.md           # Historial de cambios
+└── justificacion.md       # Decisiones de diseño
 ```
 
 ---
 
-## Cómo usar el proyecto
+## Instalación y configuración
 
-### Lo que necesitas:
-- Python 3.10 o más nuevo
-- Una terminal o consola
+### Requisitos previos:
+- **Python 3.10 o superior**
+- **pip** (gestor de paquetes de Python)
+- **git** (para clonar el repositorio)
 
-### Instalar:
-1. **Descargar el proyecto:**
+### Pasos de instalación:
+
+1. **Clonar el repositorio:**
    ```bash
-   git clone [URL del repositorio]
+   git clone https://github.com/um-computacion/computacion-2025-backgammon-JoacoVanrell.git
    cd computacion-2025-backgammon-JoacoVanrell
    ```
 
-2. **Crear un entorno virtual (recomendado):**
+2. **Crear entorno virtual (recomendado):**
    ```bash
    python3 -m venv venv
    
@@ -75,73 +105,92 @@ proyecto/
    pip install -r requirements.txt
    ```
 
-### Jugar:
+---
+
+## Cómo usar el proyecto
+
+### Opción 1: Jugar en la terminal (CLI)
+
 ```bash
-python cli/CLI.py
+python3 cli/CLI.py
 ```
 
-### Ejecutar tests:
+**Comandos durante el juego:**
+- Ingresa el número del punto de origen (1-24)
+- Ingresa el número del punto de destino (1-24)
+- Escribe `salir` para terminar la partida
+
+### Opción 2: Jugar con interfaz gráfica (Pygame)
+
 ```bash
-python -m unittest discover test/ -v
+python3 pygame_ui/main.py
 ```
 
-### Ver cobertura de tests:
+### Ejecutar todos los tests:
+
 ```bash
-coverage run -m unittest discover test/
-coverage report
+python3 -m unittest discover -s test -v
 ```
+
+**Resultado esperado:** 46 tests aprobados
+
+### Ver cobertura de código:
+
+```bash
+# Ejecutar tests con coverage
+python3 -m coverage run -m unittest discover -s test
+
+# Ver reporte en terminal
+python3 -m coverage report
+
+# Generar reporte HTML
+python3 -m coverage html
+# Abrir htmlcov/index.html en un navegador
+```
+
+**Cobertura esperada:** >90% en el módulo `core/`
+
+### Verificar calidad con pylint:
+
+```bash
+# Verificar el core
+pylint core/
+
+# Verificar el CLI
+pylint cli/
+
+# Verificar todo
+pylint core/ cli/
+```
+
+**Score esperado:** ≥8.0/10.0
 
 ---
 
-## Cómo se juega (básico)
+## Reglas del Backgammon (resumen)
 
-1. **Objetivo:** Sacar todas tus fichas del tablero antes que tu oponente
+### Objetivo:
+Ser el primero en sacar todas tus 15 fichas del tablero.
 
-2. **Tablero:** 
-   - 24 puntos numerados del 1 al 24
-   - Las fichas blancas van de 24 hacia 1
-   - Las fichas negras van de 1 hacia 24
+### Tablero:
+- 24 puntos numerados
+- Jugador blanco mueve de 24→1
+- Jugador negro mueve de 1→24
 
-3. **Turnos:**
-   - Tiras dos dados
-   - Mueves tus fichas según los números que salieron
-   - Si sale doble (ej: 3-3), tienes 4 movimientos
+### Mecánica del juego:
 
-4. **Movimientos:**
-   - Ingresas el punto de origen (donde está tu ficha)
-   - Ingresas el punto de destino (donde la quieres mover)
-   - El programa valida si el movimiento es válido
+1. **Lanzar dados**: Cada turno tiras dos dados
+2. **Mover fichas**: Usa los valores de los dados para mover
+3. **Dobles**: Si sacas doble (ej: 3-3), tienes 4 movimientos
+4. **Captura**: Si una ficha enemiga está sola, puedes capturarla (va a la barra)
+5. **Reingreso**: Las fichas capturadas deben reingresar antes de hacer otros movimientos
+6. **Bear-off**: Cuando todas tus fichas están en casa (últimos 6 puntos), puedes sacarlas
+7. **Victoria**: El primero en sacar todas sus fichas gana
 
-5. **Captura:**
-   - Si hay una ficha enemiga sola, la puedes capturar
-   - La ficha capturada va a la "barra" y debe reentrar
-
-6. **Bear-off:**
-   - Cuando todas tus fichas están en "casa" (puntos 1-6 o 19-24)
-   - Puedes empezar a sacarlas del tablero
-   - El primero en sacar todas gana
-
----
-
-## Lo que aprendí haciendo este proyecto
-
-### Conceptos de programación:
-- **Clases y objetos:** Cada cosa del juego es una clase (Tablero, Ficha, Dado, etc.)
-- **Encapsulación:** Cada clase maneja sus propios datos
-- **Separación de responsabilidades:** Cada clase hace una cosa específica
-- **Módulos:** Organizar el código en archivos separados
-
-### Herramientas:
-- **Git:** Para llevar control de cambios
-- **unittest:** Para hacer tests automáticos
-- **coverage:** Para ver qué partes del código están probadas
-- **Documentación:** README, CHANGELOG, comentarios en el código
-
-### Dificultades que tuve:
-- Entender todas las reglas del Backgammon
-- Organizar bien las clases y sus responsabilidades
-- Hacer que los tests cubran todos los casos
-- Manejar los errores y validaciones
+### Restricciones:
+- No puedes mover a un punto con 2+ fichas enemigas
+- Debes usar todos los dados si es posible
+- Si solo puedes usar un dado, debes usar el mayor
 
 ---
 
@@ -150,7 +199,7 @@ coverage report
 ```
 === Backgammon CLI ===
 
-Tablero de Backgammon:
+Tablero actual:
 ==================================================
 13 14 15 16 17 18   19 20 21 22 23 24
  N  N  N  N  N  N  |  B  B
@@ -167,31 +216,80 @@ Tablero de Backgammon:
 12 11 10  9  8  7    6  5  4  3  2  1
 ==================================================
 
-Turno de: Jugador 1 (blanco)
-Tirada de dados: (4, 2)
-Origen (1-24, o 'salir'): 24
-Destino (1-24, o 'salir'): 20
+Turno de: Jugador Blanco
+Dados lanzados: (5, 3)
+Movimientos disponibles: [5, 3]
+
+Ingresa punto de origen (1-24 o 'salir'): 24
+Ingresa punto de destino (1-24 o 'salir'): 19
+
+✓ Movimiento realizado: 24 → 19
+Movimientos restantes: [3]
+
+Ingresa punto de origen (1-24 o 'salir'): 13
+Ingresa punto de destino (1-24 o 'salir'): 10
+
+✓ Movimiento realizado: 13 → 10
+Turno terminado.
 ```
 
 ---
 
-## Estadísticas del proyecto
+## Arquitectura y diseño
 
-- **Líneas de código:** ~1,500
-- **Clases principales:** 5 (Board, Game, Player, Dice, Checker)  
-- **Tests:** 46 pruebas unitarias
-- **Cobertura:** >90% del código está probado
-- **Tiempo de desarrollo:** 3 meses (parte del cuatrimestre)
+### Principios aplicados:
+
+1. **Separación de responsabilidades**: 
+   - `core/`: Lógica pura del juego
+   - `cli/` y `pygame_ui/`: Interfaces de usuario
+   - `test/`: Pruebas unitarias
+
+2. **Encapsulación**: 
+   - Cada clase maneja su propio estado
+   - Atributos privados con getters/setters
+
+3. **Abstracción**: 
+   - Interfaces claras entre componentes
+   - El UI no conoce detalles internos del core
+
+4. **Testing**: 
+   - Tests unitarios para cada clase
+   - Tests de integración para flujos completos
+
+### Clases principales:
+
+- **`Game`**: Orquesta el juego completo (turnos, dados, victoria)
+- **`Board`**: Maneja el tablero y validaciones de movimientos
+- **`Player`**: Representa un jugador (color, nombre, contadores)
+- **`Dice`**: Maneja los dados y las tiradas
+- **`Checker`**: Representa una ficha individual
 
 ---
 
-## Archivos importantes
+## Tecnologías y herramientas
 
-- **`core/game.py`:** La lógica principal del juego
-- **`cli/CLI.py`:** El programa que ejecutas para jugar
-- **`test/`:** Todos los tests para verificar que funciona
-- **`justificacion.md`:** Explico las decisiones técnicas que tomé
-- **`CHANGELOG.md`:** Lista cronológica de todos los cambios
+- **Lenguaje**: Python 3.10+
+- **Testing**: unittest (biblioteca estándar)
+- **Cobertura**: coverage.py
+- **Calidad de código**: pylint
+- **UI Gráfica**: pygame 2.6+
+- **Control de versiones**: Git/GitHub
+- **CI/CD**: GitHub Actions
 
 ---
+
+
+## Problemas conocidos y limitaciones
+
+- La IA de los jugadores no está implementada (solo juego humano vs humano)
+- El CLI es básico (sin colores ni formato avanzado)
+- No hay persistencia de partidas (guardar/cargar)
+- No hay red/multijugador online
+
+---
+
+
+
+
+
 
