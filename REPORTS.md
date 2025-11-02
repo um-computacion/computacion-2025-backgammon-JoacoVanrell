@@ -1,0 +1,22 @@
+# Automated Reports
+## Coverage Report
+```text
+Name              Stmts   Miss  Cover   Missing
+-----------------------------------------------
+core/board.py       108      5    95%   78, 92, 118, 120, 122
+core/checker.py      44      5    89%   58, 63, 65, 67, 75
+core/dice.py         20      0   100%
+core/game.py        131     15    89%   52, 91, 106, 137-153, 161
+core/player.py       29      0   100%
+-----------------------------------------------
+TOTAL               332     25    92%
+
+```
+## Pylint Report
+```text
+************* Module main.py
+main.py:1:0: F0001: No module named main.py (fatal)
+************* Module test.py
+test.py:1:0: F0001: No module named test.py (fatal)
+
+```
